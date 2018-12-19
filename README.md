@@ -1,5 +1,6 @@
 <p align="center">
-	<h1>ProxyPool Java代理池系统</h1>
+	<h1>ProxyPool</h1>
+	<h2>Java代理池系统</h2>
 </p>
 
 -- QQ交流群： 822297027 --
