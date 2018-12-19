@@ -56,6 +56,4 @@ ProxyPool是基于Spring-Boot 2.x + Redis实现的代理池系统，做过爬虫
 
 如果你觉得ProxyPool不错，可以捐赠请作者吃个烧饼，在此表示感谢^_^。
 
-点击以下链接，将页面拉到最下方点击“捐赠”即可。
-
-[前往捐赠](https://gitee.com/jsbd/ProxyPool)
+将页面拉到最下方点击“捐赠”按钮即可。
