@@ -46,7 +46,7 @@ ProxyPool是基于Spring-Boot 2.x + Redis实现的代理池系统，做过爬虫
 
 #### 特别鸣谢
 
-1. [spring-boot](https://spring.io/projects/spring-boot)
+1. [Spring-Boot](https://spring.io/projects/spring-boot)
 2. [Hutool](https://gitee.com/loolly/hutool)
 3. [Redis](https://redis.io/)
 4. [selenium](https://github.com/SeleniumHQ/selenium)
