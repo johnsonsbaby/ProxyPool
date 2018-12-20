@@ -126,6 +126,35 @@ public class RedisManager {
         return getRandomProxy(proxies).toString();
     }
 
+
+    /**
+     * 将当前代理的分值做-1或删除操作
+     *
+     * @param proxy
+     * @return
+     */
+    public void decrementOrRemove(String proxy) {
+        Double score = this.redisTemplate.opsForZSet().score(redisKey, proxy);
+        if (score != null && score - 1 > minScore) {
+            LOGGER.warn("将代理[{}]的分值-1", proxy);
+            this.redisTemplate.opsForZSet().incrementScore(redisKey, proxy, -1);
+        } else {
+            LOGGER.warn("将代理[{}]从Redis当中删除", proxy);
+            this.redisTemplate.opsForZSet().remove(redisKey, proxy);
+        }
+    }
+
+    /**
+     * 获取当前代理的分值，如果代理不存在返回null
+     *
+     * @param proxy
+     * @return
+     */
+    public Double score(String proxy) {
+        return this.redisTemplate.opsForZSet().score(redisKey, proxy);
+    }
+
+
     /**
      * 随机从集合中获取一个元素
      *

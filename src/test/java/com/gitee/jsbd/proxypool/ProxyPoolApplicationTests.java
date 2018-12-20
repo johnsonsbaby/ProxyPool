@@ -30,6 +30,10 @@ public class ProxyPoolApplicationTests {
         this.redisManager.save(proxy);
         this.redisManager.validOk(proxy);
 
+        Console.log(this.redisManager.score(proxy));
+        this.redisManager.decrementOrRemove(proxy);
+        Console.log(this.redisManager.score(proxy));
+
         Console.log(this.redisManager.exists(proxy));
         Console.log(this.redisManager.count());
         Console.log(this.redisManager.all());
