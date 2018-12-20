@@ -41,6 +41,11 @@ public class ProxyPoolApplicationTests {
     }
 
     @Test
+    public void testCleanupInvalidProxy() {
+        this.proxyDAO.cleanup();
+    }
+
+    @Test
     public void test66ipSpider() {
         List<String> results = this.ip66Spider.crawl();
         if (!CollectionUtils.isEmpty(results)) {

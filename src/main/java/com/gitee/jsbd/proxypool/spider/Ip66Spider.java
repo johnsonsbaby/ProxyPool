@@ -26,7 +26,7 @@ public class Ip66Spider implements ISpider {
 
     @Override
     public List<String> crawl() {
-        int page = 2;
+        int page = 100;
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, 10);
         List<String> results = new LinkedList<>();

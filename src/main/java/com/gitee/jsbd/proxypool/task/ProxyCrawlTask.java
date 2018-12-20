@@ -1,6 +1,5 @@
 package com.gitee.jsbd.proxypool.task;
 
-
 import com.gitee.jsbd.proxypool.dao.ProxyDAO;
 import com.gitee.jsbd.proxypool.spider.Ip66Spider;
 import org.slf4j.Logger;
@@ -13,9 +12,9 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 @Component
-public class ProxyTask {
+public class ProxyCrawlTask {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(ProxyTask.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(ProxyCrawlTask.class);
 
     @Autowired
     private ProxyDAO proxyDAO;
@@ -25,7 +24,7 @@ public class ProxyTask {
     /**
      * 定时抓取免费代理
      */
-    @Scheduled(initialDelay = 3 * 1000, fixedDelay = 10 * 60 * 1000)
+    @Scheduled(initialDelay = 5 * 1000, fixedDelay = 2 * 60 * 60 * 1000)
     public void crawlProxyScheduale() {
 
         try {
@@ -44,14 +43,5 @@ public class ProxyTask {
 
     }
 
-
-    /**
-     * 定时验证代理的有效性
-     */
-    @Scheduled(fixedDelay = 3 * 60 * 1000)
-    public void validProxyScheduled() {
-
-
-    }
 
 }

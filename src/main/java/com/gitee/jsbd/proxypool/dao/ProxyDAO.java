@@ -50,7 +50,7 @@ public class ProxyDAO {
     public boolean save(String proxy) {
         if (proxyPattern.matcher(proxy).matches()) {
             if (!exists(proxy)) {
-                LOGGER.info("保存代理:[{}]", proxy);
+                LOGGER.info("===>>>保存代理:[{}]", proxy);
                 return this.redisTemplate.opsForZSet().add(redisKey, proxy, initScore);
             }
         }
@@ -100,7 +100,7 @@ public class ProxyDAO {
      * @return
      */
     public boolean validOk(String proxy) {
-        LOGGER.info("代理[{}]可用，设置为[{}]", proxy, maxScore);
+        LOGGER.info("===>>>代理[{}]可用，设置为[{}]", proxy, maxScore);
         return this.redisTemplate.opsForZSet().add(redisKey, proxy, maxScore);
     }
 
@@ -110,9 +110,8 @@ public class ProxyDAO {
      * 则最小最大区间获取可用代理，然后随机挑选一个代理返回给用户
      *
      * @return
-     * @throws Exception
      */
-    public String random() throws Exception {
+    public String random() {
 
         Set<Object> proxies = this.redisTemplate.opsForZSet().rangeByScore(redisKey, maxScore, maxScore);
         if (CollectionUtils.isEmpty(proxies)) {
@@ -120,12 +119,24 @@ public class ProxyDAO {
         }
 
         if (CollectionUtils.isEmpty(proxies)) {
-            throw new Exception("池中已无可用代理");
+            return null;
         }
 
         return getRandomProxy(proxies).toString();
     }
 
+    /**
+     * 获取高可用的代理
+     *
+     * @return
+     */
+    public String randomGetHighAvailableProxy() {
+        Set<Object> proxies = this.redisTemplate.opsForZSet().rangeByScore(redisKey, maxScore, maxScore);
+        if (CollectionUtils.isEmpty(proxies)) {
+            return null;
+        }
+        return getRandomProxy(proxies).toString();
+    }
 
     /**
      * 将当前代理的分值做-1或删除操作
@@ -136,10 +147,10 @@ public class ProxyDAO {
     public void decrementOrRemove(String proxy) {
         Double score = this.redisTemplate.opsForZSet().score(redisKey, proxy);
         if (score != null && score - 1 > minScore) {
-            LOGGER.warn("将代理[{}]的分值-1", proxy);
+            LOGGER.warn("===>>>将代理[{}]的分值-1", proxy);
             this.redisTemplate.opsForZSet().incrementScore(redisKey, proxy, -1);
         } else {
-            LOGGER.warn("将代理[{}]从Redis当中删除", proxy);
+            LOGGER.warn("===>>>将代理[{}]从Redis当中删除", proxy);
             this.redisTemplate.opsForZSet().remove(redisKey, proxy);
         }
     }
@@ -152,6 +163,19 @@ public class ProxyDAO {
      */
     public Double score(String proxy) {
         return this.redisTemplate.opsForZSet().score(redisKey, proxy);
+    }
+
+
+    /**
+     * 清理失效的代理
+     */
+    public void cleanup() {
+        Set<Object> invalidSet = this.redisTemplate.opsForZSet().rangeByScore(redisKey, minScore, minScore);
+        if (!CollectionUtils.isEmpty(invalidSet)) {
+            for (Object proxy : invalidSet) {
+                this.decrementOrRemove(proxy.toString());
+            }
+        }
     }
 
 
