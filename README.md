@@ -1,11 +1,29 @@
 ### ProxyPool
 
--- QQ交流群： 822297027 --
+<p align="left">
+    <a>
+    	<img src="https://img.shields.io/badge/JDK-1.8+-brightgreen.svg" >
+    	<img src="https://img.shields.io/badge/SpringBoot-2.x-green.svg" >
+    </a>
+	<a href="https://gitee.com/jsbd/ProxyPool/repository/archive/master.zip">
+		<img src="https://img.shields.io/badge/version-1.0.0-green.svg" >
+	</a>
+	<a href="https://gitee.com/jsbd/ProxyPool/LICENSE">
+		<img src="http://img.shields.io/:license-MIT-blue.svg" >
+	</a>
+</p>
 
+
+-------------------------------------------------------------------------------
 
 #### 软件简介
 
 ProxyPool是基于Spring-Boot 2.x + Redis实现的代理池系统，做过爬虫项目的应该都了解，维护一个稳定的代理池对爬虫项目是多么重要。
+
+
+
+-------------------------------------------------------------------------------
+
 
 
 #### 环境搭建
@@ -16,15 +34,19 @@ ProxyPool是基于Spring-Boot 2.x + Redis实现的代理池系统，做过爬虫
 4. Chrome浏览器及相应版本的ChromeDriver（由于要抓取的网站有WAF反爬虫机制，为了简单起见项目依赖selenium来驱动Chrome浏览器访问目标站点来绕过反爬虫的限制，所以需要你的电脑中已经安装了Chrome浏览器和ChromeDriver驱动）
 
 
+
 #### 运行项目
 
 1. fork本项目或者[点击这里](https://gitee.com/jsbd/ProxyPool/repository/archive/master.zip)下载本项目到自己的电脑 
 2. 修改`src/main/resources/application.properties`文件中的相关配置为你自己的配置
-3. 从Terminal进入项目根目录执行`mvn spring-boot:run`即可运行本项目，从浏览器访问[http://127.0.0.1:9999](http://127.0.0.1:9999)即可看到欢迎消息
+3. 从Terminal进入项目根目录执行`mvn spring-boot:run`即可运行本项目，从浏览器访问[http://127.0.0.1:9999](http://127.0.0.1:9999)即可看到系统首页文档
+
+
 
 #### 项目文档
 
 如果按照上述已经搭建好了基础环境并顺利的运行起来了ProxyPool代理池系统，进入首页就能看到所提供的所有API接口文档
+
 
 
 #### 已完成功能
@@ -34,6 +56,7 @@ ProxyPool是基于Spring-Boot 2.x + Redis实现的代理池系统，做过爬虫
 3. 66ip免费代理抓取
 
 
+
 #### 待办事项
 
 1. 代理验证定时调度器
@@ -41,6 +64,7 @@ ProxyPool是基于Spring-Boot 2.x + Redis实现的代理池系统，做过爬虫
 3. 添加访问代理的API
 4. 添加手工录入代理的功能
 5. 完善文档
+
 
 
 #### 参与贡献
@@ -54,6 +78,7 @@ ProxyPool是基于Spring-Boot 2.x + Redis实现的代理池系统，做过爬虫
 7. 即时交流请加QQ交流群： 822297027（加群备注：ProxyPool） 
 
 
+
 #### 特别鸣谢
 
 1. [Spring-Boot](https://spring.io/projects/spring-boot)
@@ -62,8 +87,7 @@ ProxyPool是基于Spring-Boot 2.x + Redis实现的代理池系统，做过爬虫
 4. [selenium](https://github.com/SeleniumHQ/selenium)
 
 
+
 #### 捐赠
 
-如果你觉得ProxyPool不错，可以捐赠请作者吃个烧饼，在此表示感谢^_^。
-
-将页面拉到最下方点击“捐赠”按钮即可。
+如果你觉得ProxyPool不错，可以捐赠请作者吃个烧饼，在此表示感谢^_^，点击最下方“捐赠”按钮即可。
