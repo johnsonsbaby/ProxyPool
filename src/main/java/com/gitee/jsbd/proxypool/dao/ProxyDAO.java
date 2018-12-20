@@ -49,8 +49,8 @@ public class ProxyDAO {
      */
     public boolean save(String proxy) {
         if (proxyPattern.matcher(proxy).matches()) {
-            LOGGER.info("保存代理:[{}]", proxy);
             if (!exists(proxy)) {
+                LOGGER.info("保存代理:[{}]", proxy);
                 return this.redisTemplate.opsForZSet().add(redisKey, proxy, initScore);
             }
         }
