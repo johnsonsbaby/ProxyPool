@@ -8,7 +8,7 @@
 	<a href="https://gitee.com/jsbd/ProxyPool/repository/archive/master.zip">
 		<img src="https://img.shields.io/badge/version-1.0.0-green.svg" >
 	</a>
-	<a href="https://gitee.com/jsbd/ProxyPool/LICENSE">
+	<a href="https://gitee.com/jsbd/ProxyPool/tree/master/LICENSE">
 		<img src="http://img.shields.io/:license-MIT-blue.svg" >
 	</a>
 </p>
