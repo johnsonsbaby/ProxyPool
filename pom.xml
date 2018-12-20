@@ -10,9 +10,9 @@
     </parent>
     <groupId>com.gitee.jsbd</groupId>
     <artifactId>proxypool</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>proxypool</name>
-    <description>Demo project for Spring Boot</description>
+    <version>1.0.0</version>
+    <name>ProxyPool</name>
+    <description>ProxyPool project base on Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>

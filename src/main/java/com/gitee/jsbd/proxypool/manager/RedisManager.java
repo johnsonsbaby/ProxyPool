@@ -1,23 +1,32 @@
 package com.gitee.jsbd.proxypool.manager;
 
+import cn.hutool.core.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Set;
 import java.util.regex.Pattern;
 
 @Service
 public class RedisManager {
-    public static final double INIT_SCORE = 10;
-    public static final double MIN_SCORE = 0;
-    public static final double MAX_SCORE = 100;
+
     private static final String PROXY_RULE = "\\d+\\.\\d+\\.\\d+\\.\\d+\\:\\d+";
-    private static final String PROXIES_KEY = "proxies";
     private static Logger LOGGER = LoggerFactory.getLogger(RedisManager.class);
     private static Pattern proxyPattern = Pattern.compile(PROXY_RULE);
+    @Value("${proxy.score.init}")
+    private double initScore = 5;
+    @Value("${proxy.score.min}")
+    private double minScore = 0;
+    @Value("${proxy.score.max}")
+    private double maxScore = 10;
+    @Value("${proxy.redis.key}")
+    private String redisKey = "proxies";
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -29,7 +38,7 @@ public class RedisManager {
      * @return
      */
     public boolean exists(String proxy) {
-        return this.redisTemplate.opsForZSet().score(PROXIES_KEY, proxy) != null;
+        return this.redisTemplate.opsForZSet().score(redisKey, proxy) != null;
     }
 
     /**
@@ -42,7 +51,7 @@ public class RedisManager {
         if (proxyPattern.matcher(proxy).matches()) {
             LOGGER.info("保存代理:[{}]", proxy);
             if (!exists(proxy)) {
-                return this.redisTemplate.opsForZSet().add(PROXIES_KEY, proxy, INIT_SCORE);
+                return this.redisTemplate.opsForZSet().add(redisKey, proxy, initScore);
             }
         }
         return false;
@@ -54,7 +63,7 @@ public class RedisManager {
      * @return
      */
     public long count() {
-        return this.redisTemplate.opsForZSet().zCard(PROXIES_KEY);
+        return this.redisTemplate.opsForZSet().zCard(redisKey);
     }
 
     /**
@@ -63,7 +72,7 @@ public class RedisManager {
      * @return
      */
     public Set<Object> all() {
-        return this.redisTemplate.opsForZSet().rangeByScore(PROXIES_KEY, MIN_SCORE, MAX_SCORE);
+        return this.redisTemplate.opsForZSet().rangeByScore(redisKey, minScore, maxScore);
     }
 
     /**
@@ -81,7 +90,7 @@ public class RedisManager {
      * @return
      */
     public Set<Object> batchQuery(long start, long end) {
-        return this.redisTemplate.opsForZSet().reverseRange(PROXIES_KEY, start, end);
+        return this.redisTemplate.opsForZSet().reverseRange(redisKey, start, end);
     }
 
     /**
@@ -91,8 +100,49 @@ public class RedisManager {
      * @return
      */
     public boolean validOk(String proxy) {
-        LOGGER.info("代理[{}]可用，设置为[{}]", proxy, MAX_SCORE);
-        return this.redisTemplate.opsForZSet().add(PROXIES_KEY, proxy, MAX_SCORE);
+        LOGGER.info("代理[{}]可用，设置为[{}]", proxy, maxScore);
+        return this.redisTemplate.opsForZSet().add(redisKey, proxy, maxScore);
     }
+
+    /**
+     * 从Redis中获取可用的代理
+     * 优先获取最大分值的代理，如果没有找到最大分值代理，
+     * 则最小最大区间获取可用代理，然后随机挑选一个代理返回给用户
+     *
+     * @return
+     * @throws Exception
+     */
+    public String random() throws Exception {
+
+        Set<Object> proxies = this.redisTemplate.opsForZSet().rangeByScore(redisKey, maxScore, maxScore);
+        if (CollectionUtils.isEmpty(proxies)) {
+            proxies = this.redisTemplate.opsForZSet().rangeByScore(redisKey, minScore, maxScore);
+        }
+
+        if (CollectionUtils.isEmpty(proxies)) {
+            throw new Exception("池中已无可用代理");
+        }
+
+        return getRandomProxy(proxies).toString();
+    }
+
+    /**
+     * 随机从集合中获取一个元素
+     *
+     * @param set
+     * @return
+     */
+    private Object getRandomProxy(Set<Object> set) {
+        int rn = RandomUtil.randomInt(set.size());
+        int i = 0;
+        for (Object object : set) {
+            if (i == rn) {
+                return object;
+            }
+            i++;
+        }
+        return null;
+    }
+
 
 }
