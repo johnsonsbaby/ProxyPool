@@ -1,7 +1,7 @@
 package com.gitee.jsbd.proxypool;
 
 import cn.hutool.core.lang.Console;
-import com.gitee.jsbd.proxypool.manager.RedisManager;
+import com.gitee.jsbd.proxypool.dao.ProxyDAO;
 import com.gitee.jsbd.proxypool.spider.Ip66Spider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,27 +17,27 @@ import java.util.List;
 public class ProxyPoolApplicationTests {
 
     @Autowired
-    private RedisManager redisManager;
+    private ProxyDAO proxyDAO;
     @Autowired
     private Ip66Spider ip66Spider;
 
     @Test
     public void testRedisDB() {
-        System.out.println(this.redisManager.keys());
+        System.out.println(this.proxyDAO.keys());
 
         String proxy = "111.198.77.169:9999";
 
-        this.redisManager.save(proxy);
-        this.redisManager.validOk(proxy);
+        this.proxyDAO.save(proxy);
+        this.proxyDAO.validOk(proxy);
 
-        Console.log(this.redisManager.score(proxy));
-        this.redisManager.decrementOrRemove(proxy);
-        Console.log(this.redisManager.score(proxy));
+        Console.log(this.proxyDAO.score(proxy));
+        this.proxyDAO.decrementOrRemove(proxy);
+        Console.log(this.proxyDAO.score(proxy));
 
-        Console.log(this.redisManager.exists(proxy));
-        Console.log(this.redisManager.count());
-        Console.log(this.redisManager.all());
-        Console.log(this.redisManager.batchQuery(100, 110));
+        Console.log(this.proxyDAO.exists(proxy));
+        Console.log(this.proxyDAO.count());
+        Console.log(this.proxyDAO.all());
+        Console.log(this.proxyDAO.batchQuery(100, 110));
     }
 
     @Test

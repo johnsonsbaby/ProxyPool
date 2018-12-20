@@ -1,4 +1,4 @@
-package com.gitee.jsbd.proxypool.manager;
+package com.gitee.jsbd.proxypool.dao;
 
 import cn.hutool.core.util.RandomUtil;
 import org.slf4j.Logger;
@@ -13,10 +13,10 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 @Service
-public class RedisManager {
+public class ProxyDAO {
 
     private static final String PROXY_RULE = "\\d+\\.\\d+\\.\\d+\\.\\d+\\:\\d+";
-    private static Logger LOGGER = LoggerFactory.getLogger(RedisManager.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(ProxyDAO.class);
     private static Pattern proxyPattern = Pattern.compile(PROXY_RULE);
     @Value("${proxy.score.init}")
     private double initScore = 5;
