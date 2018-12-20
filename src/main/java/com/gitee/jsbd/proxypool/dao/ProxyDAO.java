@@ -67,6 +67,15 @@ public class ProxyDAO {
     }
 
     /**
+     * 获取所有稳定的代理数
+     *
+     * @return
+     */
+    public long countHigh() {
+        return this.redisTemplate.opsForZSet().rangeByScore(redisKey, maxScore, maxScore).size();
+    }
+
+    /**
      * 获取全部代理
      *
      * @return
