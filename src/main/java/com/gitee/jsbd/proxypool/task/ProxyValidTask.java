@@ -7,6 +7,8 @@ import com.gitee.jsbd.proxypool.dao.ProxyDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -18,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
+@ConfigurationProperties
 public class ProxyValidTask {
 
     private static Logger LOGGER = LoggerFactory.getLogger(ProxyValidTask.class);
@@ -25,45 +28,52 @@ public class ProxyValidTask {
 
     @Autowired
     private ProxyDAO proxyDAO;
+    @Value("${task.valid.enabled}")
+    private Boolean enabled;
 
     /**
      * 定时验证代理的有效性
      */
     @Scheduled(initialDelay = 10 * 1000, fixedDelay = 10 * 60 * 1000)
     public void validProxyScheduled() {
-        int pageSize = 20;
-        long count = this.proxyDAO.count();
-        LOGGER.info("===>>>当前代理池剩余[{}]个代理", count);
 
-        for (long start = 0; start < count; start += pageSize) {
-            long end = Long.min(start + pageSize - 1, count);
-            Set<Object> results = this.proxyDAO.batchQuery(start, end);
+        if (enabled) {
 
-            if (!CollectionUtils.isEmpty(results)) {
-                for (Object proxy : results) {
-                    workerGroup.submit(() -> {
-                        LOGGER.info(proxy.toString());
-                        String[] addrArr = proxy.toString().split(":");
-                        String ip = addrArr[0];
-                        int port = Integer.parseInt(addrArr[1]);
+            int pageSize = 200;
+            long count = this.proxyDAO.count();
+            LOGGER.info("===>>>当前代理池剩余[{}]个代理", count);
 
-                        try {
-                            HttpRequest request = new HttpRequest("http://httpbin.org/get");
-                            Proxy httpProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(ip, port));
-                            request.setProxy(httpProxy);
-                            HttpResponse response = request.timeout(5000).executeAsync();
+            for (long start = 0; start < count; start += pageSize) {
+                long end = Long.min(start + pageSize - 1, count);
+                Set<Object> results = this.proxyDAO.batchQuery(start, end);
 
-                            if (response.getStatus() == HttpStatus.HTTP_OK) {
-                                this.proxyDAO.validOk(proxy.toString());
-                            } else {
+                if (!CollectionUtils.isEmpty(results)) {
+                    for (Object proxy : results) {
+                        workerGroup.submit(() -> {
+                            LOGGER.info(proxy.toString());
+                            String[] addrArr = proxy.toString().split(":");
+                            String ip = addrArr[0];
+                            int port = Integer.parseInt(addrArr[1]);
+
+                            try {
+                                HttpRequest request = new HttpRequest("http://httpbin.org/get");
+                                Proxy httpProxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(ip, port));
+                                request.setProxy(httpProxy);
+                                HttpResponse response = request.timeout(5000).executeAsync();
+
+                                if (response.getStatus() == HttpStatus.HTTP_OK) {
+                                    this.proxyDAO.validOk(proxy.toString());
+                                } else {
+                                    this.proxyDAO.decrementOrRemove(proxy.toString());
+                                }
+                            } catch (Exception e) {
+                                LOGGER.warn("===>>>代理[{}]验证失败", proxy);
                                 this.proxyDAO.decrementOrRemove(proxy.toString());
                             }
-                        } catch (Exception e) {
-                            LOGGER.warn("===>>>代理[{}]验证失败", proxy);
-                            this.proxyDAO.decrementOrRemove(proxy.toString());
-                        }
-                    });
+                        });
+                    }
                 }
+
             }
 
         }
