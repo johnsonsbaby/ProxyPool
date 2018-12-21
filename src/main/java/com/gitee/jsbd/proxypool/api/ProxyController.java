@@ -1,6 +1,7 @@
 package com.gitee.jsbd.proxypool.api;
 
 import com.gitee.jsbd.proxypool.common.CodeEnum;
+import com.gitee.jsbd.proxypool.common.PageInfo;
 import com.gitee.jsbd.proxypool.common.R;
 import com.gitee.jsbd.proxypool.dao.ProxyDAO;
 import com.gitee.jsbd.proxypool.domain.ProxyStats;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api")
-public class ApiController {
+@RequestMapping(value = "/api/proxy")
+public class ProxyController {
 
     @Autowired
     private ProxyDAO proxyDAO;
@@ -22,7 +23,7 @@ public class ApiController {
      *
      * @return
      */
-    @RequestMapping("/proxy/stats")
+    @RequestMapping("/stats")
     public R stats() {
         long all = proxyDAO.count();
         long high = proxyDAO.countHigh();
@@ -37,7 +38,7 @@ public class ApiController {
      *
      * @return
      */
-    @RequestMapping("/proxy/random")
+    @RequestMapping("/random")
     public R random() {
 
         String proxy = this.proxyDAO.random();
@@ -52,7 +53,7 @@ public class ApiController {
      *
      * @return
      */
-    @RequestMapping("/proxy/random/high")
+    @RequestMapping("/random/high")
     public R randomHigh() {
 
         String proxy = this.proxyDAO.randomGetHighAvailableProxy();
@@ -67,9 +68,9 @@ public class ApiController {
      *
      * @return
      */
-    @RequestMapping("/proxy/save")
+    @RequestMapping("/save")
     public R save(@RequestParam(name = "ip") String ip, @RequestParam(name = "port") String port) {
-        String proxy = ip + port;
+        String proxy = ip + ":" + port;
         if (!StringUtils.isEmpty(proxy)) {
             return R.error(CodeEnum.PARAMS_ERROR);
         }
@@ -77,6 +78,25 @@ public class ApiController {
             return R.error(CodeEnum.SAVE_PROXY_ERROR);
         }
         return R.ok();
+    }
+
+
+    /**
+     * 分页获取当前代理池的所有代理
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping("/list")
+    public R list(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+                  @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+
+
+        return R.ok().data(pageInfo);
     }
 
 }

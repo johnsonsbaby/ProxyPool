@@ -39,7 +39,7 @@ ProxyPool是基于Spring-Boot + Redis实现的稳定高可用的代理池系统
 1. JDK 1.8+ 安装及PATH环境变量配置
 2. Maven 3.3+ 安装及PATH环境变量配置
 3. Redis 5.0.2 项目使用了Redis中的有序集合数据结构，不一定非要安装这个版本，只因为作者的电脑上安装的是这个版本而已
-4. Chrome浏览器及相应版本的ChromeDriver（由于要抓取的网站有WAF反爬虫机制，为了简单起见项目依赖selenium来驱动Chrome浏览器访问目标站点来绕过反爬虫的限制，所以需要你的电脑中已经安装了Chrome浏览器和ChromeDriver驱动）
+4. PhantomJS（由于要抓取的网站有WAF反爬虫机制，为了简单起见项目依赖selenium来驱动PhantomJS浏览器访问目标站点来绕过反爬虫的限制，所以需要你的电脑中已经安装好了PhantomJS并加入到系统环境变量PATH中）
 
 
 
@@ -58,16 +58,15 @@ ProxyPool是基于Spring-Boot + Redis实现的稳定高可用的代理池系统
 2. 存储代理到Redis功能
 3. 66ip免费代理抓取
 4. 代理验证和代理抓取的定时调度器
-
+5. 添加访问代理的API
+6. 添加手工录入代理的功能
 
 
 #### 待办事项
 
-1. 添加访问代理的API
-2. 添加手工录入代理的功能
-3. 添加更多的免费代理爬虫
-4. 整个高大上的项目首页
-5. 完善文档
+1. 添加更多的免费代理爬虫
+2. 整个高大上的项目首页
+3. 完善文档
 
 
 
@@ -79,19 +78,29 @@ ProxyPool是基于Spring-Boot + Redis实现的稳定高可用的代理池系统
 4. commit后push到自己的库
 5. 登录Gitee，然后新建一个pull request，提交时填写一些必要的信息
 6. 等待作者合并
-7. 即时交流请加QQ交流群： 822297027（加群备注：ProxyPool） 
+ 
+
+
+#### 即时交流
+
+1. 请加QQ交流群： 822297027（加群备注：ProxyPool）
 
 
 
-#### 特别鸣谢
+
+#### 特别感谢
+
+感谢以下各个伟大的开源项目，是你们让程序员的世界更加美好，感谢！
 
 1. [Spring-Boot](https://spring.io/projects/spring-boot)
 2. [Hutool](https://gitee.com/loolly/hutool)
 3. [Redis](https://redis.io/)
-4. [selenium](https://github.com/SeleniumHQ/selenium)
+4. [Selenium](https://github.com/SeleniumHQ/selenium)
+5. [PhantomJS](http://phantomjs.org/api/)
+6. [jsoup](https://jsoup.org/)
 
 
 
 #### 捐赠
 
-如果你觉得ProxyPool不错，可以捐赠请作者吃个烧饼，在此表示感谢^_^，支持微信和支付宝收款哦。
+如果你觉得ProxyPool不错，可以捐赠请作者吃个烧饼，在此表示感谢，支持微信和支付宝收款哦^_^

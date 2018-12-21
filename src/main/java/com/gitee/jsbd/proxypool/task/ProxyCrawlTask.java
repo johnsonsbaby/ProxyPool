@@ -24,7 +24,7 @@ public class ProxyCrawlTask {
     /**
      * 定时抓取免费代理
      */
-    @Scheduled(initialDelay = 5000 * 1000, fixedDelay = 2 * 60 * 60 * 1000)
+    @Scheduled(initialDelay = 2 * 1000, fixedDelay = 2 * 60 * 60 * 1000)
     public void crawlProxyScheduale() {
 
         try {

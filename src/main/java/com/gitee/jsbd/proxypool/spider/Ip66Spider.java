@@ -1,12 +1,12 @@
 package com.gitee.jsbd.proxypool.spider;
 
+import com.gitee.jsbd.proxypool.common.WebDriverUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,8 @@ public class Ip66Spider implements ISpider {
     @Override
     public List<String> crawl() {
         int page = 100;
-        WebDriver driver = new ChromeDriver();
+//        WebDriver driver = new ChromeDriver();
+        WebDriver driver = WebDriverUtil.phantomJS();
         WebDriverWait wait = new WebDriverWait(driver, 10);
         List<String> results = new LinkedList<>();
         try {
@@ -51,7 +52,6 @@ public class Ip66Spider implements ISpider {
                         results.add(proxy);
                     }
                 }
-
                 page--;
             }
         } catch (Exception e) {
