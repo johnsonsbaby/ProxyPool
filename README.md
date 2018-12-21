@@ -91,6 +91,8 @@
 
 2. PhantomJS无头浏览器的安装及PATH环境变量配置（由于要抓取的网站有WAF反爬虫机制，为了简单起见项目使用selenium来驱动PhantomJS浏览器来绕过目标站点对爬虫的限制）
 
+3. [JDK1.8电梯](https://www.oracle.com/technetwork/cn/java/javase/downloads/jdk8-downloads-2133151-zhs.html)、 [Maven电梯](http://maven.apache.org/download.cgi)、 [Redis电梯](https://redis.io/download)、 [PhantomJS电梯](http://phantomjs.org/download.html)
+
 
 
 
@@ -110,11 +112,13 @@
  
 
 
+
 #### 开源交流
 
 1. 有问题请在本项目上直接提`ISSUE`
 
 2. 即时沟通请加QQ群： 822297027（加群备注：`ProxyPool`）
+
 
 
 
@@ -128,6 +132,7 @@
 4. [Selenium](https://github.com/SeleniumHQ/selenium)
 5. [PhantomJS](http://phantomjs.org/api/)
 6. [jsoup](https://jsoup.org/)
+
 
 
 
