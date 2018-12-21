@@ -1,14 +1,19 @@
 package com.gitee.jsbd.proxypool.dao;
 
 import cn.hutool.core.util.RandomUtil;
+import com.gitee.jsbd.proxypool.domain.Proxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -100,6 +105,33 @@ public class ProxyDAO {
      */
     public Set<Object> batchQuery(long start, long end) {
         return this.redisTemplate.opsForZSet().reverseRange(redisKey, start, end);
+    }
+
+    /**
+     * 批量获取带分值的代理列表
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<Proxy> batchQueryWithScore(long start, long end) {
+        Set<ZSetOperations.TypedTuple<Object>> rangeWithScores = this.redisTemplate.opsForZSet().reverseRangeWithScores(redisKey, start, end);
+
+        if (!CollectionUtils.isEmpty(rangeWithScores)) {
+            List<Proxy> results = new ArrayList<>(rangeWithScores.size());
+            Iterator<ZSetOperations.TypedTuple<Object>> iterator = rangeWithScores.iterator();
+            while (iterator.hasNext()) {
+                ZSetOperations.TypedTuple<Object> next = iterator.next();
+                String[] proxyArr = next.getValue().toString().split(":");
+                Proxy bean = new Proxy();
+                bean.setIp(proxyArr[0]);
+                bean.setPort(proxyArr[1]);
+                bean.setScore(next.getScore());
+                results.add(bean);
+            }
+            return results;
+        }
+        return null;
     }
 
     /**

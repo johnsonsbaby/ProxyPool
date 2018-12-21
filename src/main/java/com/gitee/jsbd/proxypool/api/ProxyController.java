@@ -1,9 +1,11 @@
 package com.gitee.jsbd.proxypool.api;
 
+import cn.hutool.core.lang.Console;
 import com.gitee.jsbd.proxypool.common.CodeEnum;
 import com.gitee.jsbd.proxypool.common.PageInfo;
 import com.gitee.jsbd.proxypool.common.R;
 import com.gitee.jsbd.proxypool.dao.ProxyDAO;
+import com.gitee.jsbd.proxypool.domain.Proxy;
 import com.gitee.jsbd.proxypool.domain.ProxyStats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -11,12 +13,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/proxy")
 public class ProxyController {
 
     @Autowired
     private ProxyDAO proxyDAO;
+
+    public static void main(String[] args) {
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(1);
+        pageInfo.setPageSize(20);
+        pageInfo.setTotal(1000);
+
+        Console.log(pageInfo);
+        Console.log(pageInfo.getStart());
+        Console.log(0 % 20);
+    }
 
     /**
      * 统计当前代理池中的代理数和稳定代理数
@@ -80,7 +95,6 @@ public class ProxyController {
         return R.ok();
     }
 
-
     /**
      * 分页获取当前代理池的所有代理
      *
@@ -92,11 +106,15 @@ public class ProxyController {
     public R list(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
                   @RequestParam(name = "pageSize", defaultValue = "20") int pageSize) {
         PageInfo pageInfo = new PageInfo();
-        pageInfo.setPageNum(pageNum);
-        pageInfo.setPageSize(pageSize);
+        int count = (int) this.proxyDAO.count();
+        if (count > 0) {
+            pageInfo.setPageNum(pageNum);
+            pageInfo.setPageSize(pageSize);
+            pageInfo.setTotal(count);
 
-
+            List<Proxy> list = this.proxyDAO.batchQueryWithScore(pageInfo.getStart(), pageInfo.getEnd());
+            pageInfo.setList(list);
+        }
         return R.ok().data(pageInfo);
     }
-
 }

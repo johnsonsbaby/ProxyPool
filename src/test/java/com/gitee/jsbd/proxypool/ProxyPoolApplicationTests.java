@@ -38,6 +38,7 @@ public class ProxyPoolApplicationTests {
         Console.log(this.proxyDAO.count());
         Console.log(this.proxyDAO.all());
         Console.log(this.proxyDAO.batchQuery(100, 110));
+        this.proxyDAO.batchQueryWithScore(0, 0);
     }
 
     @Test

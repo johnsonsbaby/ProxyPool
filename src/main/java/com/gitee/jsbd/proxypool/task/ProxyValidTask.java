@@ -29,7 +29,7 @@ public class ProxyValidTask {
     /**
      * 定时验证代理的有效性
      */
-    @Scheduled(initialDelay = 20000 * 1000, fixedDelay = 10 * 60 * 1000)
+    @Scheduled(initialDelay = 10 * 1000, fixedDelay = 10 * 60 * 1000)
     public void validProxyScheduled() {
         int pageSize = 20;
         long count = this.proxyDAO.count();

@@ -8,9 +8,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class ProxyPoolApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ProxyPoolApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ProxyPoolApplication.class, args);
+    }
 
 }
 
