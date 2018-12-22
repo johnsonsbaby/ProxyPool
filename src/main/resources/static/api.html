@@ -47,51 +47,18 @@
         </div>
         <div align="center" style="width: 100%">
             <table id="tables" name="tables" style="height: 100%;width: 70%;">
+                <tr><td>统计代理</td><td>/api/proxy/stats</td><td><a href="/api/proxy/stats" target="_blank">看看效果</a></td></tr>
+
+                <tr><td>随机获取一个代理</td><td>/api/proxy/random</td><td><a href="/api/proxy/random" target="_blank">看看效果</a></td></tr>
+
+                <tr><td>随机获取一个代理(高可用)</td><td>/api/proxy/random/high</td><td><a href="/api/proxy/random/high" target="_blank">看看效果</a></td></tr>
+
+                <tr><td>分页获取代理列表</td><td>/api/proxy/list?pageNum=1&pageSize=20</td><td><a href="/api/proxy/list?pageNum=1&pageSize=20" target="_blank">看看效果</a></td></tr>
+
+                <tr><td>手工保存代理</td><td>/api/proxy/save?ip=XXXX&port=XX</td><td><a href="/api/proxy/save?ip=11.11.11.11&port=1111" target="_blank">看看效果</a></td></tr>
             </table>
-            <ul style="display:inline-block;" id="page" name="page" class="pagination">
-            </ul>
-            <input style="display:block;" type="text" id="size" name="size">
         </div>
     </div>
 </div>
 </body>
 </html>
-<script>
-    $(function () {
-        getList(1, 20)
-    })
-
-    function getList(pageNum) {
-        $.post("/api/proxy/list", {"pageNum": pageNum}, function (data) {
-            del()
-            if (data.code != 200) {
-                alert(data.msg)
-                return;
-            }
-            $("#size").val("共" + data.data.pages + "页\t" + data.data.total + "条")
-            var table = $("#tables");
-            table.append("<tr>" +
-                "            <th>ip</th>" +
-                "            <th>port</th>" +
-                "            <th>score</th>" +
-                "            </tr>")
-            for (var i = 0; i < data.data.list.length; i++) {
-                var html = "<tr>" +
-                    '        <td>' + data.data.list[i].ip + '</td>' +
-                    '        <td>' + data.data.list[i].port + '</td>' +
-                    '        <td>' + data.data.list[i].score + '</td>' +
-                    '      </tr>'
-                table.append(html);
-            }
-            var num = data.data.pageNum - 1;
-            var num2 = data.data.pageNum + 1;
-            $("#page").append("<li><a onclick=getList(" + num + ")>&laquo;</a></li>");
-            $("#page").append("<li><a onclick=getList(" + num2 + ")>&raquo;</a></li>");
-        })
-
-        function del() {
-            document.getElementById("page").innerHTML = "";
-            document.getElementById("tables").innerHTML = "";
-        }
-    }
-</script>

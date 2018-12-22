@@ -86,7 +86,7 @@ public class ProxyController {
     @RequestMapping("/save")
     public R save(@RequestParam(name = "ip") String ip, @RequestParam(name = "port") String port) {
         String proxy = ip + ":" + port;
-        if (!StringUtils.isEmpty(proxy)) {
+        if (StringUtils.isEmpty(proxy)) {
             return R.error(CodeEnum.PARAMS_ERROR);
         }
         if (!this.proxyDAO.save(proxy)) {
