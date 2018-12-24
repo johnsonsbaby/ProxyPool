@@ -84,6 +84,19 @@
 
 
 
+#### API文档
+
+| API | 释义 | 备注 |
+| :------------: | :------------: | :------------: |
+| /api/proxy/stats | 统计代理池数量  |  统计代理池总数和高可用代理总数  |
+| /api/proxy/random |  随机获取一个代理  |  先获取高可用的，如果没有找到，随机返回一个其他代理，可能返回NULL  |
+| /api/proxy/random/high |  随机获取一个高可用代理  |  随机返回分数最高的代理，如果没有返回NULL  |
+| /api/proxy/list?pageNum=1&pageSize=20 |  获取代理分页列表  |  pageNum默认1，pageSize默认20  |
+| /api/proxy/save?ip=XXXX&port=XX |  保存代理  |  手工保存一个代理  |
+
+
+
+
 
 #### 开发及运行环境搭建
 
