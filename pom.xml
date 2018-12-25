@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.gitee.jsbd</groupId>
-    <artifactId>proxypool</artifactId>
+    <artifactId>ProxyPool</artifactId>
     <version>1.0.0</version>
     <name>ProxyPool</name>
     <description>ProxyPool project base on Spring Boot</description>
