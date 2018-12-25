@@ -1,13 +1,11 @@
 package com.gitee.jsbd.proxypool.spider;
 
-import com.gitee.jsbd.proxypool.common.WebDriverUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,52 +13,46 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
-
 /**
- * 抓取66ip的免费代理地址
+ * 抓取快代理IP(https://www.kuaidaili.com/free/inha/)
  */
 @Service
-public class Ip66Spider implements ISpider {
-    private static Logger LOGGER = LoggerFactory.getLogger(Ip66Spider.class);
+public class KuaidailiSpider implements ISpider {
+    private static Logger LOGGER = LoggerFactory.getLogger(KuaidailiSpider.class);
 
     @Override
     public List<String> crawl() {
         int page = 1;
-//        WebDriver driver = new ChromeDriver();
-        WebDriver driver = WebDriverUtil.phantomJS();
-        WebDriverWait wait = new WebDriverWait(driver, 10);
         List<String> results = new LinkedList<>();
         try {
             while (page <= 100) {
-                StringBuilder url = new StringBuilder("http://www.66ip.cn/");
-                url.append(page).append(".html");
+                StringBuilder url = new StringBuilder("https://www.kuaidaili.com/free/inha/");
+                url.append(page).append("/");
                 LOGGER.info("start crawl [{}]", url.toString());
+                HttpResponse response = HttpRequest.get(url.toString()).timeout(5000).executeAsync();
 
-                driver.get(url.toString());
-                wait.until(presenceOfElementLocated(By.cssSelector(".containerbox table")));
+                String html = response.body();
+                Thread.sleep(1000);//请求慢一点，这个网站请求快了会返回503
 
-                String html = driver.getPageSource();
                 Document document = Jsoup.parse(html);
-                Elements elements = document.select(".containerbox table tr:gt(0)");
+                Elements elements = document.select("#list .table tbody tr");
 
                 if (elements != null && elements.size() > 0) {
                     for (Element element : elements) {
                         String ip = element.select("td:nth-child(1)").text();
                         String port = element.select("td:nth-child(2)").text();
                         String proxy = ip + ":" + port;
-                        LOGGER.info("Get proxy[{}] from 66ip.", proxy);
+                        LOGGER.info("Get proxy[{}] from 快代理.", proxy);
                         results.add(proxy);
                     }
                 }
                 page++;
             }
         } catch (Exception e) {
-            LOGGER.error("抓取66ip代理发生异常", e);
+            LOGGER.error("抓取快代理IP发生异常", e);
         } finally {
-            driver.quit();
         }
-
+        LOGGER.info("size=" + results.size());
         return results;
     }
 

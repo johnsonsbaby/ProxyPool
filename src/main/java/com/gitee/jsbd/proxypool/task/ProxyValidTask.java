@@ -34,7 +34,7 @@ public class ProxyValidTask {
     /**
      * 定时验证代理的有效性
      */
-    @Scheduled(initialDelay = 10 * 1000, fixedDelay = 10 * 60 * 1000)
+    @Scheduled(initialDelay = 10 * 1000, fixedDelay = 3 * 60 * 1000)
     public void validProxyScheduled() {
 
         if (enabled) {

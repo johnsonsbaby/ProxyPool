@@ -2,6 +2,7 @@ package com.gitee.jsbd.proxypool.task;
 
 import com.gitee.jsbd.proxypool.dao.ProxyDAO;
 import com.gitee.jsbd.proxypool.spider.Ip66Spider;
+import com.gitee.jsbd.proxypool.spider.KuaidailiSpider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,15 @@ public class ProxyCrawlTask {
     private ProxyDAO proxyDAO;
     @Autowired
     private Ip66Spider ip66Spider;
+    @Autowired
+    private KuaidailiSpider kuaidailiSpider;
     @Value("${task.crawl.enabled}")
     private Boolean enabled;
 
     /**
      * 定时抓取免费代理
      */
-    @Scheduled(initialDelay = 2 * 1000, fixedDelay = 2 * 60 * 60 * 1000)
+    @Scheduled(initialDelay = 2 * 1000, fixedDelay = 1 * 60 * 60 * 1000)
     public void crawlProxyScheduale() {
 
         if (enabled) {
@@ -37,9 +40,11 @@ public class ProxyCrawlTask {
             try {
                 long start = System.currentTimeMillis();
                 LOGGER.info("=====>>>>>开始抓取代理");
-                List<String> ip66List = ip66Spider.crawl();
-                if (!CollectionUtils.isEmpty(ip66List)) {
-                    for (String proxy : ip66List) {
+                List<String> results = ip66Spider.crawl();
+                results.addAll(kuaidailiSpider.crawl());
+
+                if (!CollectionUtils.isEmpty(results)) {
+                    for (String proxy : results) {
                         this.proxyDAO.save(proxy);
                     }
                 }
