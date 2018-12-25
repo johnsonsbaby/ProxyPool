@@ -1,6 +1,8 @@
 package com.gitee.jsbd.proxypool.dao;
 
 import cn.hutool.core.util.RandomUtil;
+import com.gitee.jsbd.proxypool.common.CodeEnum;
+import com.gitee.jsbd.proxypool.common.R;
 import com.gitee.jsbd.proxypool.domain.Proxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,14 +54,17 @@ public class ProxyDAO {
      * @param proxy
      * @return
      */
-    public boolean save(String proxy) {
+    public R save(String proxy) {
         if (proxyPattern.matcher(proxy).matches()) {
             if (!exists(proxy)) {
                 LOGGER.info("===>>>保存代理:[{}]", proxy);
-                return this.redisTemplate.opsForZSet().add(redisKey, proxy, initScore);
+                this.redisTemplate.opsForZSet().add(redisKey, proxy, initScore);
+                return R.ok();
+            } else {
+                return R.error(CodeEnum.PROXY_EXISTS);
             }
         }
-        return false;
+        return R.error(CodeEnum.PARAMS_ERROR);
     }
 
     /**

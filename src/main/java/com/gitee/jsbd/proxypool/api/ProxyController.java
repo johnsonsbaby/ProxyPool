@@ -89,10 +89,7 @@ public class ProxyController {
         if (StringUtils.isEmpty(proxy)) {
             return R.error(CodeEnum.PARAMS_ERROR);
         }
-        if (!this.proxyDAO.save(proxy)) {
-            return R.error(CodeEnum.SAVE_PROXY_ERROR);
-        }
-        return R.ok();
+        return this.proxyDAO.save(proxy);
     }
 
     /**
