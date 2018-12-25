@@ -66,7 +66,7 @@
 
 #### 项目演示
 
-<iframe src="//player.bilibili.com/player.html?aid=38972212&cid=68493013&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+[ProxyPool系统演示@bilibili](https://www.bilibili.com/video/av38972212/)
 
 
 
