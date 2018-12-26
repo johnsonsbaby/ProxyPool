@@ -50,6 +50,8 @@
 
 6. 添加手工录入代理的功能
 
+7. 添加快代理爬虫
+
 
 
 
@@ -149,6 +151,6 @@
 
 
 
-#### 捐赠
+#### 贡献者列表
 
-如果你觉得ProxyPool不错，可以捐赠请作者吃个烧饼，在此表示感谢哦^_^
+[贡献者列表](https://gitee.com/jsbd/ProxyPool/contributors?ref=master)
