@@ -52,6 +52,8 @@
 
 7. 添加快代理爬虫
 
+8. 添加西刺代理爬虫
+
 
 
 
@@ -62,6 +64,8 @@
 2. 整个高大上的项目首页
 
 3. 完善文档
+
+4. 根据[ISSUE](https://gitee.com/jsbd/ProxyPool/issues/IQH6H)修改验证逻辑
 
 
 
