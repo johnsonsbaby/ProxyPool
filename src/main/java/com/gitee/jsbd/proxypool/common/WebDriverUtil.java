@@ -1,6 +1,8 @@
 package com.gitee.jsbd.proxypool.common;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -25,6 +27,19 @@ public class WebDriverUtil {
         // 创建无界面浏览器对象
         PhantomJSDriver driver = new PhantomJSDriver(dcaps);
         return driver;
+    }
+
+    /**
+     * 创建Chrome浏览器驱动
+     * 需要系统已经安装好了chrome浏览器和chromedriver已加入到系统PATH环境变量中
+     *
+     * @return
+     */
+    public static WebDriver chromeDriver() {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.setHeadless(true);// 创建无界面浏览器对象
+        ChromeDriver chromeDriver = new ChromeDriver(chromeOptions);
+        return chromeDriver;
     }
 
 }
